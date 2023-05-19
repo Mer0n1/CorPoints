@@ -1,0 +1,34 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CorPoints" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color.00ffffff -->
+        <item name="android:statusBarColor" tools:targetApi="l">#fd8469</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.CorPoints.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.CorPoints.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.CorPoints.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Button.White" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@android:color/white</item>
+    </style>
+
+    <style name="Button.Orange" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">#fd8469</item>
+    </style>
+
+</resources>

@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Group {
-
+    /**
+     * Есть 2 варианта сделать группу
+     * 1 - сделать бюджет и скидывание баллов +
+     * 2 - сделать среднее количество баллов участников */
     private List<InfoAccount> users;
     private List<String> req; //application for entry
     private InfoAccount admin;

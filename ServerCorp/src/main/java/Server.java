@@ -3,6 +3,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import javax.naming.Name;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,6 +28,8 @@ public class Server {
         groups = new ArrayList<>();
         bd = new BaseData();
         groups = bd.getGroups();
+        groups.get(0).addRequest("sdf");
+        groups.get(0).addRequest("Sd"); ///test
 
         reader();
         CheckAliveClients();
@@ -82,7 +85,7 @@ public class Server {
 
                                         itog = "{\"Protocol\":\"reg\",\"itog\":\"y\"}";
                                     } else
-                                        itog = "{\"Protocol\":\"reg\",\"itog\":\"n\"}";;
+                                        itog = "{\"Protocol\":\"reg\",\"itog\":\"n\"}";
 
                                     writeTo(client, itog);
                                 }
@@ -94,6 +97,7 @@ public class Server {
                                     itog.put("accounts", bd.getListJSONAccounts());
                                     writeTo(client, itog.toString());
                                 }
+
                                 if (protocol.equals("infoMyAccount")) {
                                     JSONObject itog = new JSONObject();
                                     itog.put("Protocol", "infoMyAccount");
@@ -127,10 +131,13 @@ public class Server {
                                         obj.put("score", groups.get(n).getGroupScore());
                                         array.add(obj);
                                     }
+                                    String NameAdminGroup = "null";
+                                    if (client.getGroup() != null)
+                                        NameAdminGroup = client.getGroup().getNameAdmin();
 
                                     itog.put("Protocol", "updateGroup");
                                     itog.put("groups", array);
-                                    itog.put("admin", client.getGroup().getNameAdmin());
+                                    itog.put("admin", NameAdminGroup);
                                     writeTo(client, itog.toString());
                                 }
 
@@ -203,10 +210,7 @@ public class Server {
                                     writeTo(client, itog.toString());
                                 }
                                 if(protocol.equals("SendScoreToGroup")) {
-
-                                    String req = jsonObject.get("qpoints").toString();
-                                    if (req.matches("[0-9]+"))
-                                        client.getGroup().addScore(Integer.valueOf(req));
+                                    bd.SendScoreToGroup(jsonObject.get("qpoints").toString(), client.getGroup(), client.getNickname());
                                 }
                             }
                         } catch (IOException e) {
@@ -295,7 +299,7 @@ public class Server {
     }
 
     /**Метод закрытия и очистки сервера */
-    public void CloseServer() {
+    public void CloseServer() { //возможно придется разослать всем клиентам протокол завершения
         bd.UpdateAllGroups();
 
         reader.interrupt();

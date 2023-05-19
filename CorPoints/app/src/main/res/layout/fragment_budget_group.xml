@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/scoreq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="0"
+            android:textSize="55dp"
+            android:gravity="center"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_weight="0" />
+
+        <EditText
+            android:id="@+id/et_scoregroup"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_weight="0"
+            android:background="@drawable/layout_bgd"
+            android:ems="10"
+            android:hint="Количество баллов"
+            android:textSize="26dp"
+            android:inputType="textPersonName"
+            android:padding="10dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="0" />
+
+        <TextView
+            android:id="@+id/widg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="0 -> 0"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_weight="0" />
+
+        <Button
+            android:id="@+id/SendScoreBudget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Отправить"
+            android:textSize="18dp"
+            android:background="@drawable/btn_yellow"
+            >
+
+        </Button>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"></Space>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ваш счет: "
+                android:textSize="26dp"
+                android:textColor="@color/white"
+                android:layout_weight="0"
+                />
+            <TextView
+                android:id="@+id/textScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="26dp"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            ></Space>
+
+        <Button
+            android:id="@+id/back_budget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@drawable/layout_bgd"
+            android:textColor="@color/white"
+            android:text="Назад" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+    </LinearLayout>
+
+</FrameLayout>

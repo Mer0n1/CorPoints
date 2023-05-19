@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_main">
+
+
+    <!--<FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+    </FrameLayout>-->
+
+    <FrameLayout
+        android:id="@+id/layout_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_weight="1"/>
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        tools:ignore="BottomAppBar"
+        android:background="@color/white">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <LinearLayout
+                android:id="@+id/layListAttribute"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                tools:ignore="MissingConstraints">
+
+
+                <FrameLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:srcCompat="@drawable/user" />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="0dp"></Space>
+
+                <FrameLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image_sender"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:srcCompat="@drawable/transfer" />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="0dp"></Space>
+
+                <FrameLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image_news"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:srcCompat="@drawable/newspaper" />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="0dp"></Space>
+
+                <FrameLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image_groups"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:srcCompat="@drawable/group" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</LinearLayout>

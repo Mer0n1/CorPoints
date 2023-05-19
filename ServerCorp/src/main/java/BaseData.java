@@ -39,7 +39,7 @@ public class BaseData {
         //initial AccountsList and Groups
         AccountsList = new ArrayList<>();
         groups = new ArrayList<>();
-        path = "src/main/resources/BaseData.xml"; //src/main/resources/BaseData.xml
+        path = "BaseData.xml"; //src/main/resources/BaseData.xml
 
         try {
             fXmlFile = new File(path); //src/main/resources/BaseData.xml
@@ -117,8 +117,7 @@ public class BaseData {
     {
         try {
             XMLStreamReader xmlr = XMLInputFactory.newInstance()
-                    .createXMLStreamReader(path, //src/main/resources/BaseData.xml
-                            new FileInputStream(path));
+                    .createXMLStreamReader(path, new FileInputStream(path));
 
             while (xmlr.hasNext()) {
                 xmlr.next();
@@ -154,6 +153,9 @@ public class BaseData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        InfoAccount account = new InfoAccount();
+        account.nickname = name;
+        AccountsList.add(account);
 
         return true;
     }
@@ -247,6 +249,22 @@ public class BaseData {
         UpdateUserData(from);
         UpdateUserData(whom);
     }
+    public boolean SendScoreToGroup(String score, Group group, String nameSender) {
+
+        InfoAccount account = findAccount(nameSender);
+        int scorei = 0;
+
+        if (score.matches("[0-9]+") && account != null) {
+            scorei = Integer.valueOf(score);
+            group.addScore(scorei);
+        } else
+            return false;
+
+        account.score -= scorei;
+        UpdateUserData(account);
+
+        return true;
+    }
 
     private void UpdateBaseData() { //full update all users of xml-basedata and groups
         for (InfoAccount account : AccountsList)
@@ -321,7 +339,7 @@ public class BaseData {
     /**Важная строка инициализации. Инициализирует InfoAccount в Client.
      * Этап полной инициализации */
     void initializeClient(Client client, String nickname) {
-
+        //баг, infoAccount нет. Нужно его добавлять в addAccount
         for (int j = 0; j < AccountsList.size(); j++)
             if (AccountsList.get(j).nickname.equals(nickname)) {
                 client.setInfoAccount(AccountsList.get(j));

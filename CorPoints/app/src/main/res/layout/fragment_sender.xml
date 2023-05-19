@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sender_pmenu"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/sender_pmenup"
+            android:layout_width="match_parent"
+            android:layout_height="457dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.537"
+            tools:ignore="MissingConstraints">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="15dp">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Количество баллов:  "
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/EditGetPointsSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edittext_shape"
+                    android:ems="10"
+                    android:hint="Ввод"
+                    android:inputType="textPersonName"
+                    android:padding="7dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LayoutChoose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.13"
+                tools:ignore="DuplicateIds"
+                tools:layout_editor_absoluteX="10dp">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="Выбран: "
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/UserChoose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <ListView
+                            android:id="@+id/ListChooseScore"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/layout_bgd"
+                            android:scrollbars="none" />
+                    </LinearLayout>
+                </ScrollView>
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content" />
+
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/layout_bgd"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/ListAccounts"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="none"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.92"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </LinearLayout>
+                </ScrollView>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <Button
+                android:id="@+id/send"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_orange"
+                android:text="Отправить"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.533"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.921" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ListView
+                    android:id="@+id/ListRequests"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/ListBC"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:orientation="vertical"></LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/back_req"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@drawable/layout_bgd"
+            android:textColor="@color/white"
+            android:text="Назад" />
+    </LinearLayout>
+
+
+</FrameLayout>
