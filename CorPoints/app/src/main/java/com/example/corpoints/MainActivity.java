@@ -139,3 +139,8 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
 }
+
+/**
+ * Баги
+ * Не работает выход из приложения и заход обратно
+ * */

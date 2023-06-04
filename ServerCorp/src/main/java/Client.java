@@ -1,10 +1,8 @@
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+
 
 public class Client {
     public String ip;
@@ -13,9 +11,13 @@ public class Client {
     public BufferedReader reader;
     public Timer timer;
     public boolean ininitiaze; //инициализирован?
+    public DataInputStream dIn;
+    public DataOutputStream dOut;
 
     /**Запрещено изменение в Client классе.*/
     private InfoAccount account;
+
+    public String RsaPublicKeyClient;
 
     public Client(Socket socket) {
         reconnect(socket);
@@ -29,18 +31,19 @@ public class Client {
         if (socket != null) {
             ip = socket.getInetAddress().getHostAddress();
             port = socket.getPort();
+            RsaPublicKeyClient = null;
 
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                dIn = new DataInputStream(socket.getInputStream());
+                dOut = new DataOutputStream(socket.getOutputStream());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void setInfoAccount(InfoAccount info) {
-        this.account = info;
-    }
+    public void setInfoAccount(InfoAccount info) { this.account = info; }
 
     public String getNickname() {
         if (!ininitiaze) return null;

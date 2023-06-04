@@ -8,11 +8,17 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.*;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +53,11 @@ public class BaseData {
             dBuilder = dbFactory.newDocumentBuilder();
             doc = dBuilder.parse(fXmlFile);
             tr = TransformerFactory.newInstance().newTransformer();
+            tr.setOutputProperty(OutputKeys.INDENT, "yes");
+            tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             source = new DOMSource(doc);
-            //fos = new FileOutputStream("src/main/resources/BaseData.xml");
-            //result = new StreamResult(fos);
+            result = new StreamResult(new StringWriter());
+
 
             //initial accounts
             NodeList nList = doc.getElementsByTagName("Account");
@@ -60,7 +68,9 @@ public class BaseData {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
 
-                    InfoAccount account = new InfoAccount(eElement.getAttribute("name"),
+                    InfoAccount account = new InfoAccount
+                            (eElement.getAttribute("name"),
+                             eElement.getAttribute("password"),
                             Integer.valueOf(eElement.getAttribute("score"))); //possibility of error
                     AccountsList.add(account);
                 }
@@ -75,8 +85,8 @@ public class BaseData {
                     Element eElement = (Element) nNode;
 
                     String creater = eElement.getAttribute("admin");
-                    String score = eElement.getAttribute("score");
-                    String name = eElement.getAttribute("name");
+                    String score   = eElement.getAttribute("score");
+                    String name    = eElement.getAttribute("name");
                     InfoAccount infoAccount = findAccount(creater);
 
                     if (infoAccount != null) {
@@ -113,48 +123,29 @@ public class BaseData {
     }
 
     /**Проверить на наличие пользователя в базе данных */
-    boolean CheckData(String name, String password)
+    boolean CheckAccount(String name)
     {
-        try {
-            XMLStreamReader xmlr = XMLInputFactory.newInstance()
-                    .createXMLStreamReader(path, new FileInputStream(path));
+        for (int j = 0; j < AccountsList.size(); j++)
+            if (AccountsList.get(j).nickname.equals(name))
+                return true;
 
-            while (xmlr.hasNext()) {
-                xmlr.next();
-
-                if (xmlr.isStartElement())
-                    if (xmlr.getLocalName().equals("Account")) {
-                        if (xmlr.getAttributeValue(0).equals(name) && xmlr.getAttributeValue(1).equals(password))
-                            return true;
-                }
-            }
-        } catch (FileNotFoundException | XMLStreamException ex) {
-            ex.printStackTrace();
-        }
+        return false;
+    }
+    boolean CheckAutAccount(String name, String password) {
+        for (int j = 0; j < AccountsList.size(); j++)
+            if (AccountsList.get(j).nickname.equals(name) &&
+                AccountsList.get(j).password.equals(password))
+                return true;
 
         return false;
     }
 
     /**Добавление в базу данных xml */
     boolean addAccount(String name, String password) { //check boolean
-        if (CheckData(name, password)) return false; //check existing account
 
-        try {
-            Node root = doc.getDocumentElement();
+        if (CheckAccount(name)) return false; //check existing account
 
-            //needs
-            Element nd = doc.createElement("Account");
-            nd.setAttribute("name", name);
-            nd.setAttribute("password", password);
-            nd.setAttribute("score", "0");
-            root.appendChild(nd);
-
-            save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        InfoAccount account = new InfoAccount();
-        account.nickname = name;
+        InfoAccount account = new InfoAccount(name, password, 0);
         AccountsList.add(account);
 
         return true;
@@ -169,30 +160,6 @@ public class BaseData {
         Group group = new Group(adm, nameAdmin);
         groups.add(group);
         adm.group = group;
-
-        try {
-            //Node Groups = doc.getElementById("Groups");
-            NodeList list = doc.getElementsByTagName("Groups");
-            Element element = (Element) list.item(0);
-
-            //needs
-            Element nd = doc.createElement("Group");
-            nd.setAttribute("name", name);
-            nd.setAttribute("admin", nameAdmin);
-            nd.setAttribute("score", "0");
-
-            Element user = doc.createElement("User");
-            user.setAttribute("name", nameAdmin);
-            nd.appendChild(user);
-
-            element.appendChild(nd);
-
-            save();
-        } catch (Exception e) {
-            e.printStackTrace();
-            groups.remove(group);
-            return false;
-        }
 
         return true;
     }
@@ -212,6 +179,7 @@ public class BaseData {
             return;
 
         group.addUser(account);
+        account.group = group;
     }
 
     /**Удаление пользователя из группы */
@@ -228,7 +196,7 @@ public class BaseData {
             groups.remove(group);
         }
 
-        group = null;
+        account.group = null;
     }
 
     /**Отправка очков выбранному пользователю*/
@@ -267,8 +235,8 @@ public class BaseData {
     }
 
     private void UpdateBaseData() { //full update all users of xml-basedata and groups
-        for (InfoAccount account : AccountsList)
-            UpdateUserData(account);
+        UpdateAllAccounts();
+        UpdateAllGroups();
     }
     /**Обновить данные 1 аккаунта */
     private void UpdateUserData(InfoAccount account) {
@@ -306,8 +274,8 @@ public class BaseData {
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 NodeList listGr = doc.getElementsByTagName("Groups");
-                Element eGroups = (Element) listGr.item(0);
-                eGroups.removeChild(eElement); //delete group
+                Element eGroup = (Element) listGr.item(0);
+                eGroup.removeChild(eElement); //delete group
             }
         }
 
@@ -335,10 +303,39 @@ public class BaseData {
         save();
     }
 
+    /**Обновить всю информациб об аккаунтах */
+    public void UpdateAllAccounts() {
+
+        NodeList nList = doc.getElementsByTagName("Account");
+
+        while (nList.getLength() != 0) {
+            Node nNode = nList.item(0);
+
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                NodeList listGr = doc.getElementsByTagName("Accounts");
+                Element eAccount = (Element) listGr.item(0);
+                eAccount.removeChild(eElement); //delete account
+            }
+        }
+
+        for (InfoAccount account : AccountsList) {
+            Element nd = doc.createElement("Account");
+            nd.setAttribute("name", account.nickname);
+            nd.setAttribute("password", account.password);
+            nd.setAttribute("score", String.valueOf(account.score));
+
+            NodeList nAccounts = doc.getElementsByTagName("Accounts");
+            Element eAccounts = (Element) nAccounts.item(0);
+            eAccounts.appendChild(nd);
+        }
+        save();
+    }
+
 
     /**Важная строка инициализации. Инициализирует InfoAccount в Client.
      * Этап полной инициализации */
-    void initializeClient(Client client, String nickname) {
+    public void initializeClient(Client client, String nickname) {
         //баг, infoAccount нет. Нужно его добавлять в addAccount
         for (int j = 0; j < AccountsList.size(); j++)
             if (AccountsList.get(j).nickname.equals(nickname)) {
@@ -348,7 +345,7 @@ public class BaseData {
     }
 
     /**Возвращает json массив всех пользователей */
-    String getListJSONAccounts() {
+    public String getListJSONAccounts() {
         JSONArray array = new JSONArray();
 
         for (int j = 0; j < AccountsList.size(); j++) {
@@ -360,7 +357,7 @@ public class BaseData {
         return array.toString();
     }
 
-    List<Group> getGroups() { return groups; }
+    public List<Group> getGroups() { return groups; }
 
     private void save()
     {
@@ -368,11 +365,23 @@ public class BaseData {
             fos = new FileOutputStream(path);
             result = new StreamResult(fos);
             tr.transform(source, result);
+
+            //delete empty lines xml
+            XPath xp = XPathFactory.newInstance().newXPath();
+            NodeList nl = (NodeList) xp.evaluate("//text()[normalize-space(.)='']", doc, XPathConstants.NODESET);
+
+            for (int i=0; i < nl.getLength(); ++i) {
+                Node node = nl.item(i);
+                node.getParentNode().removeChild(node);
+            }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (TransformerException e) {
             throw new RuntimeException(e);
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException(e);
         }
+
     }
     private InfoAccount findAccount(String nickname) {
 

@@ -1,18 +1,13 @@
 public class InfoAccount {
-    public String nickname;
+    public final String nickname;
+    public final String password;
     public int score;
     public Group group;
 
-    InfoAccount(String nickname, int score) {
+    InfoAccount(String nickname, String password, int score) {
         this.nickname = nickname;
         this.score = score;
+        this.password = password;
         group = null;
-
-        if (this.nickname == null)
-            this.nickname = "null";
-    }
-    InfoAccount() {
-        nickname = "null";
-        score = 0;
     }
 }

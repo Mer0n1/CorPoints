@@ -41,10 +41,12 @@ public class RequestsFragment extends Fragment {
                 for (int j = 0; j < layout.getChildCount(); j++)
                     if (layout.getChildAt(j).findViewById(R.id.AcceptItem) == v)
                     {
+                        layout.removeView(layout.getChildAt(j));
                         number = j;
                         break;
                     }
                 ListView listView = main_layout.findViewById(R.id.ListRequests);
+                AdapterRequests.remove(listView.getItemAtPosition(number).toString()); //delete request
                 Server.ProtocolAcceptRequest(listView.getItemAtPosition(number).toString());
             }
         };
@@ -56,10 +58,12 @@ public class RequestsFragment extends Fragment {
                 for (int j = 0; j < layout.getChildCount(); j++)
                     if (layout.getChildAt(j).findViewById(R.id.RejectItem) == v)
                     {
+                        layout.removeView(layout.getChildAt(j));
                         number = j;
                         break;
                     }
                 ListView listView = main_layout.findViewById(R.id.ListRequests);
+                AdapterRequests.remove(listView.getItemAtPosition(number).toString()); //delete request
                 Server.ProtocolRejectRequest(listView.getItemAtPosition(number).toString());
             }
         };

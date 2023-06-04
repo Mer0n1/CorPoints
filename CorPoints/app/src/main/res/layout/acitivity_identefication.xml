@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<ImageView
-        android:id="@+id/back2"
-        android:layout_width="1280dp"
-        android:layout_height="1920dp"
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/back3"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="-200dp"
-        tools:layout_editor_absoluteX="-500dp"/>-->
+        android:scaleType="fitXY"
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"

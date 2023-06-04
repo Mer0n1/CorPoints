@@ -90,9 +90,10 @@ public class GroupActivity extends AppCompatActivity {
         SendRequestListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (myAccount.getNameGroup() != null)
+                if (myAccount.getNameGroup() != null) {
                     Server.ProtocolJoinToGroup(nameGroup);
-                else
+                    Toast.makeText(GroupActivity.this, "Заявка отправлена", Toast.LENGTH_SHORT).show();
+                } else
                     Toast.makeText(GroupActivity.this, "Вы уже состоите в группе", Toast.LENGTH_SHORT).show();
             }
         };

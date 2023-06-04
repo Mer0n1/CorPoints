@@ -80,10 +80,10 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/image_news"
+                        android:id="@+id/image_groups"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:srcCompat="@drawable/newspaper" />
+                        tools:srcCompat="@drawable/group" />
                 </FrameLayout>
 
                 <Space
@@ -92,16 +92,18 @@
 
                 <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:visibility="invisible">
 
                     <ImageView
-                        android:id="@+id/image_groups"
+                        android:id="@+id/image_news"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:srcCompat="@drawable/group" />
+                        tools:srcCompat="@drawable/newspaper" />
                 </FrameLayout>
 
             </LinearLayout>
+
 
         </HorizontalScrollView>
 

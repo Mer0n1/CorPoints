@@ -9,8 +9,5 @@
         <module name="ServerCorp" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ServerCorp" target="18" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -26,7 +26,10 @@ public class Group {
     }
 
     public void addUser(InfoAccount account)    { users.add(account);}
-    public void addRequest(String nickname)     { req.add(nickname); }
+    public void addRequest(String nickname)     {
+        req.remove(nickname);
+        req.add(nickname);
+    }
     public void removeUser(InfoAccount account) {
         users.remove(account);
     }
