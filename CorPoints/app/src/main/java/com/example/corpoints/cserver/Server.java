@@ -1,6 +1,7 @@
 package com.example.corpoints.cserver;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.example.corpoints.MainActivity;
 import com.example.corpoints.StartIdentActivity;
@@ -57,7 +58,7 @@ public class Server {
 
     private Server() { }
 
-    public static boolean StartProtocolIdentefication(String name, String password, StartIdentActivity.TypeIdent type)
+    public static boolean StartProtocolIdentefication(String name, String password, StartIdentActivity.TypeIdent type, Activity activity)
     {
 
         Thread tr = new Thread(new Runnable() {
@@ -151,8 +152,10 @@ public class Server {
                 readerp.start();
                 StartPinger();
             }
-            else
+            else {
+                Toast.makeText(activity, "Ошибка идентефикации", Toast.LENGTH_LONG).show();
                 return false;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

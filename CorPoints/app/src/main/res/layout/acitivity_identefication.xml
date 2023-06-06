@@ -89,6 +89,18 @@
             android:text="Регистрация"
             android:textColor="@color/white" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <CheckBox
+            android:id="@+id/CheckBox_ident"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:textColor="@color/ora1"
+            android:text="Принимаю политику конфиденциальности" />
+
 
     </LinearLayout>
 

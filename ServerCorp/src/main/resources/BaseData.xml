@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <BaseData>
   <Accounts>
-    <Account name="Rendi" password="123" score="188092"/>
-    <Account name="Roma" password="123" score="11008"/>
-    <Account name="Dasha" password="123" score="754"/>
-    <Account name="sdDasha" password="123" score="308"/>
-    <Account name="eq" password="123" score="308"/>
-    <Account name="Denis" password="228" score="0"/>
-    <Account name="Red" password="123" score="0"/>
-    <Account name="gera" password="123" score="0"/>
+    <Account name="Rendi" password="123456" score="188092"/>
+    <Account name="Roma" password="123456" score="11008"/>
+    <Account name="Dasha" password="123456" score="754"/>
+    <Account name="sdDasha" password="123456" score="308"/>
+    <Account name="eq" password="123456" score="308"/>
+    <Account name="Denis" password="123456" score="0"/>
+    <Account name="Red" password="123456" score="0"/>
+    <Account name="gera" password="123456" score="0"/>
+    <Account name="TestGooglePlay" password="123456" score="100000"/>
+    <Account name="TestGooglePlay2" password="123456" score="100000"/>
   </Accounts>
   <Groups>
         
+    
     
   
     <Group admin="Rendi" name="Test" score="1280">

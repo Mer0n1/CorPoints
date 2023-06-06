@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.corpoints.cserver.MyAccount;
 import com.example.corpoints.cserver.Server;
+import com.example.corpoints.ui.GroupRedactorCreatedFragment;
 import com.example.corpoints.ui.ListGroupsFragment;
 import com.example.corpoints.ui.ProfileFragment;
 import com.example.corpoints.ui.SenderMenuFragment;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private SenderMenuFragment senderMenuFragment;
     private ListGroupsFragment listGroupsFragment;
 
+    private GroupRedactorCreatedFragment redactorCreatedFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
         senderMenuFragment = new SenderMenuFragment();
         listGroupsFragment = new ListGroupsFragment();
+        redactorCreatedFragment = new GroupRedactorCreatedFragment();
 
         //синхронизация
         Server.myAccount.adapter = senderMenuFragment.getArrayAdapter();
@@ -109,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
         for (int j = 0; j < array.length; j++)
             myAccount.AdapterUsersGroup.add(array[j]);
     }
+    public void OpenRedCrGroup(ArrayAdapter array) {
+        redactorCreatedFragment.setAdapterGroups(array);
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.layout_main_content, redactorCreatedFragment);
+        fragmentTransaction.commit();
+    }
 
     public void UpdateScore(int score) {
         profileFragment.UpdateScore(score);
@@ -139,8 +149,3 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
 }
-
-/**
- * Баги
- * Не работает выход из приложения и заход обратно
- * */

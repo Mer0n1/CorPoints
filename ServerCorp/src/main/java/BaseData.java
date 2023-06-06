@@ -157,7 +157,7 @@ public class BaseData {
         InfoAccount adm = findAccount(nameAdmin);
         if (adm == null) return false;
 
-        Group group = new Group(adm, nameAdmin);
+        Group group = new Group(adm, name);
         groups.add(group);
         adm.group = group;
 

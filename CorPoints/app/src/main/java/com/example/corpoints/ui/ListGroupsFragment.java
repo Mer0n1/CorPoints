@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.corpoints.MainActivity;
@@ -39,6 +37,7 @@ public class ListGroupsFragment extends Fragment {
 
         AdapterGroups = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
 
+
         View.OnClickListener ClickGoToMyGroup = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,9 +50,10 @@ public class ListGroupsFragment extends Fragment {
         };
         View.OnClickListener ClickCreateGroup = new View.OnClickListener() { //создание группы
             @Override
-            public void onClick(View v) { //*
+            public void onClick(View v) {
 
-                String name = "FirstGroup";
+                ((MainActivity)getActivity()).OpenRedCrGroup(AdapterGroups);
+                /*String name = "FirstGroup";
 
                 if (myAccount.getNameGroup() != null) {
                     Toast.makeText(getActivity(), "Вы уже состоите в группе",Toast.LENGTH_SHORT).show();
@@ -61,11 +61,10 @@ public class ListGroupsFragment extends Fragment {
                 }
                 for (int j = 0; j < AdapterGroups.getCount(); j++)
                     if (!name.equals(AdapterGroups.getItem(j))) {
-                        System.out.println("Группа с таким названием уже существует");
                         Toast.makeText(getActivity(), "Группа с таким названием уже существует",Toast.LENGTH_SHORT).show();
                         return;
                     }
-                Server.ProtocolCreateGroup(name);
+                Server.ProtocolCreateGroup(name);*/
             }
         };
         AdapterView.OnItemClickListener ListClickGroups = new AdapterView.OnItemClickListener() { //list score click
@@ -81,7 +80,7 @@ public class ListGroupsFragment extends Fragment {
         v1.setAdapter(AdapterGroups);
 
         main_layout.findViewById(R.id.MyGroupButton).setOnClickListener(ClickGoToMyGroup);
-        main_layout.findViewById(R.id.CreateGroupButton).setOnClickListener(ClickCreateGroup);
+        main_layout.findViewById(R.id.RedactorGroupButton).setOnClickListener(ClickCreateGroup);
         ((ListView)main_layout.findViewById(R.id.ListGroups)).setOnItemClickListener(ListClickGroups);
 
         return main_layout;
