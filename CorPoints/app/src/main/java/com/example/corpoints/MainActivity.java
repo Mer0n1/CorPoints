@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.app_bar_main); //пока без выплывающего меню
         getLayoutInflater().inflate(R.layout.fragment_profile, findViewById(R.id.layout_main_content));
@@ -106,15 +107,15 @@ public class MainActivity extends AppCompatActivity {
         senderMenuFragment.setListUsers(array);
     }
     public void setListGroups(String[] array, String[] score) {
-        listGroupsFragment.setListGroups(array);
+        listGroupsFragment.UpdateListAdapter(array, score);
     }
     public void setUsersGroup(String[] array) {
         myAccount.AdapterUsersGroup.clear();
         for (int j = 0; j < array.length; j++)
             myAccount.AdapterUsersGroup.add(array[j]);
     }
-    public void OpenRedCrGroup(ArrayAdapter array) {
-        redactorCreatedFragment.setAdapterGroups(array);
+    public void OpenRedCrGroup(ArrayAdapter adapter) {
+        redactorCreatedFragment.setAdapterGroups(adapter);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.layout_main_content, redactorCreatedFragment);
         fragmentTransaction.commit();
@@ -149,3 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
 }
+
+/**
+ * Изменить название протоколов
+ */

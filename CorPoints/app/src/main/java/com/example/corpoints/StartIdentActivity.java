@@ -22,6 +22,7 @@ public class StartIdentActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.acitivity_identefication);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Test Signin without server
@@ -38,8 +39,9 @@ public class StartIdentActivity extends Activity {
         TextView textView = findViewById(R.id.CheckBox_ident);
         textView.setText(Html.fromHtml(text));
         textView.setMovementMethod(LinkMovementMethod.getInstance());
+        ((CheckBox)findViewById(R.id.CheckBox_ident)).setChecked(true);
 
-        
+
         View.OnClickListener ClickIdent = new View.OnClickListener() {
             @Override
             public void onClick(View view) {

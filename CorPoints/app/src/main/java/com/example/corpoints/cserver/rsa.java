@@ -27,6 +27,7 @@ import javax.crypto.Cipher;
  * */
 public class rsa {
     public static final String KEY_ALGORITHM = "RSA";
+    public static final String KEY2 = "RSA/ECB/PKCS1Padding";
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 
     private static final String PUBLIC_KEY = "RSAPublicKey"; //RSAPublicKey
@@ -128,7 +129,7 @@ public class rsa {
         Key privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
 
         // расшифровываем данные
-        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        Cipher cipher = Cipher.getInstance(KEY2);
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
         return cipher.doFinal(data);
@@ -179,7 +180,7 @@ public class rsa {
         Key publicKey = keyFactory.generatePublic(x509KeySpec);
 
         // 对数据加密
-        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        Cipher cipher = Cipher.getInstance(KEY2);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
         return cipher.doFinal(data);

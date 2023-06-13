@@ -101,8 +101,8 @@ public class Server {
                     byte[] aeskey = new byte[length_pk];
                     dIn.readFully(aeskey, 0, aeskey.length);
 
-                    //byte[] decodebyte = rsa.decryptByPrivateKey(aeskey, RsaPrivateKey);
-                    AesKey = new SecretKeySpec(aeskey, 0, aeskey.length, "AES"); //байты в SecretKey
+                    byte[] decodebyte = rsa.decryptByPrivateKey(aeskey, RsaPrivateKey);
+                    AesKey = new SecretKeySpec(decodebyte, 0, decodebyte.length, "AES"); //байты в SecretKey
                     //------Пересылка ключей завершена
 
                     //Отправим зашифрованные данные протокола идентефикации
@@ -213,12 +213,13 @@ public class Server {
                         }
                     }
 
-                    if (protocol.equals("updateGroup")) {
+                    if (protocol.equals("UpdateGroups")) {
                         String list = json.get("groups").toString();
                         JSONArray array = new JSONArray(list);
                         String[] strarray = new String[array.length()];
                         String[] scorearray = new String[array.length()];
                         myAccount.NameAdminGroup = json.get("admin").toString();
+                        System.out.println("List gro " + list);
 
                         for (int j = 0; j < strarray.length; j++) {
                             JSONObject json_data = array.getJSONObject(j);
@@ -251,7 +252,7 @@ public class Server {
                         }
                     }
 
-                    if (protocol.equals("updateUsersGroup")) {
+                    if (protocol.equals("UpdateUsersGroup")) {
                         String list = json.get("users").toString();
                         JSONArray array = new JSONArray(list);
 
@@ -397,9 +398,9 @@ public class Server {
     //Protocols
     public static void UpdateInfoProtocolAccount()  { SendWithAes("{\"Protocol\":\"infoMyAccount\"}"); }
     public static void UpdateInfoProtocolAccounts() { SendWithAes("{\"Protocol\":\"ListAccounts\"}"); }
-    public static void UpdateInfoProtocolGroups()   { SendWithAes("{\"Protocol\":\"updateGroup\"}");}
+    public static void UpdateInfoProtocolGroups()   { SendWithAes("{\"Protocol\":\"UpdateGroups\"}");}
     public static void UpdateInfoProtocolUsersGroup(String nameGroup) {
-        SendWithAes("{\"Protocol\":\"updateUsersGroup\",\"nameGroup\":\"" + nameGroup + "\"}");}
+        SendWithAes("{\"Protocol\":\"UpdateUsersGroup\",\"nameGroup\":\"" + nameGroup + "\"}");}
     public static void ProtocolInfoRequests() { SendWithAes("{\"Protocol\":\"InfoRequests\"}");}
     public static void ProtocolCreateGroup(String name) {
         SendWithAes("{\"Protocol\":\"createGroup\",\"nameGroup\":\"" + name + "\"}"); }

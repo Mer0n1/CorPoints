@@ -106,10 +106,10 @@ public class Server {
                                 }
 
                                 if (protocol.equals("sendScore")) {
-                                    String from_whom = jsonObject.get("Me").toString(); //от кого
+                                    //String from_whom = jsonObject.get("Me").toString();  //от кого
                                     String to_whom   = jsonObject.get("Who").toString(); //к кому
                                     String score     = jsonObject.get("qpoints").toString();//сколько
-                                    bd.SendScore(from_whom, to_whom, Integer.valueOf(score));
+                                    bd.SendScore(client.getNickname(), to_whom, Integer.valueOf(score));
                                 }
 
                                 if (protocol.equals("createGroup")) {
@@ -118,11 +118,11 @@ public class Server {
 
                                     bd.addGroup(nameGroup, nameAdmin);
                                 }
-                                if (protocol.equals("updateGroup")) { //write list groups to client
+                                if (protocol.equals("UpdateGroups")) { //write list groups to client
                                     ProtocolUpdateListGroups(client);
                                 }
 
-                                if (protocol.equals("updateUsersGroup")) { //write users of group to client
+                                if (protocol.equals("UpdateUsersGroup")) { //write users of group to client
                                     String nameGroup = jsonObject.get("nameGroup").toString();
                                     ProtocolUpdateUsersGroup(client, nameGroup);
                                 }
@@ -258,10 +258,10 @@ public class Server {
                                     //тут пересылаем AES ключ
                                     String encodedKey = Base64.getEncoder().encodeToString(AesKey.getEncoded());
                                     byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
-                                    /*byte[] encbyte = rsa.encryptByPublicKey(decodedKey, client.RsaPublicKeyClient);*/
+                                    byte[] encbyte = rsa.encryptByPublicKey(decodedKey, client.RsaPublicKeyClient);
 
-                                    client.dOut.writeInt(decodedKey.length);
-                                    client.dOut.write(decodedKey);
+                                    client.dOut.writeInt(encbyte.length);
+                                    client.dOut.write(encbyte);
                                 }
 
 
@@ -414,7 +414,7 @@ public class Server {
         if (client.getGroup() != null)
             NameAdminGroup = client.getGroup().getNameAdmin();
 
-        itog.put("Protocol", "updateGroup");
+        itog.put("Protocol", "UpdateGroups");
         itog.put("groups", array);
         itog.put("admin", NameAdminGroup);
         writeToWithAes(client, itog.toString());
@@ -431,7 +431,7 @@ public class Server {
                 break;
             }
 
-        itog.put("Protocol", "updateUsersGroup");
+        itog.put("Protocol", "UpdateUsersGroup");
         itog.put("nameGroup", name_group);
         itog.put("users", array);
         writeToWithAes(client, itog.toString());
