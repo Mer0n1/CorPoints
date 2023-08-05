@@ -3,6 +3,7 @@ package com.example.corpoints;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,10 +17,10 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.corpoints.cserver.MyAccount;
-import com.example.corpoints.cserver.Server;
+import com.example.corpoints.layer_server.DataCash;
 import com.example.corpoints.ui.GroupRedactorCreatedFragment;
 import com.example.corpoints.ui.ListGroupsFragment;
 import com.example.corpoints.ui.ProfileFragment;
@@ -27,8 +28,6 @@ import com.example.corpoints.ui.SenderMenuFragment;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    private MyAccount myAccount;
 
     private FragmentTransaction fragmentTransaction;
     private ProfileFragment profileFragment;
@@ -41,60 +40,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.app_bar_main); //пока без выплывающего меню
         getLayoutInflater().inflate(R.layout.fragment_profile, findViewById(R.id.layout_main_content));
 
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        profileFragment = new ProfileFragment();
-        senderMenuFragment = new SenderMenuFragment();
-        listGroupsFragment = new ListGroupsFragment();
-        redactorCreatedFragment = new GroupRedactorCreatedFragment();
-
-        //синхронизация
-        Server.myAccount.adapter = senderMenuFragment.getArrayAdapter();
-        Server.reader.setActivity(this);
-        myAccount = Server.synchronizationMyAccount(); //ожидание обновление информации с сервера, синхронизация
-
+        DataCash.UpdateData();
         InitResources();
-        UpdateProfile(); //show Profile fragment
-
+        OpenFragment(profileFragment, R.id.layout_main_content);
 
         //Переключение меню
         View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FrameLayout frameLayout = findViewById(R.id.layout_main_content);
-                frameLayout.removeAllViews();
+                if (v == findViewById(R.id.image_profile))
+                    OpenFragment(profileFragment, R.id.layout_main_content);
 
-                if (v == findViewById(R.id.image_profile)) {
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.layout_main_content, profileFragment);
-                    fragmentTransaction.commit();
+                if (v == findViewById(R.id.image_sender))
+                    OpenFragment(senderMenuFragment, R.id.layout_main_content);
 
-                    Server.UpdateInfoProtocolAccount();
-                    profileFragment.UpdateScore(myAccount.getScore());
-                    profileFragment.setNickname(myAccount.getName());
-                }
-                if (v == findViewById(R.id.image_sender)) {
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.layout_main_content, senderMenuFragment);
-                    fragmentTransaction.commit();
-                    Server.UpdateInfoProtocolAccounts();
-                }
-                if (v == findViewById(R.id.image_groups)) {
+                if (v == findViewById(R.id.image_groups))
+                    OpenFragment(listGroupsFragment, R.id.layout_main_content);
 
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.layout_main_content, listGroupsFragment);
-                    fragmentTransaction.commit();
-                    Server.UpdateInfoProtocolGroups();
-                }
-
-                if (v == findViewById(R.id.image_news)) {
+                if (v == findViewById(R.id.image_news))
                     Toast.makeText(MainActivity.this, "В разработке...", Toast.LENGTH_LONG).show();
-                }
+
             }
         };
         findViewById(R.id.image_profile).setOnClickListener(onClick);
@@ -102,40 +73,26 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.image_groups).setOnClickListener(onClick);
     }
 
+    public void OpenFragment(Fragment fragment, int id_layout) {
+        FrameLayout frameLayout = findViewById(id_layout);
+        frameLayout.removeAllViews();
 
-    public void setListUsers(String[] array) {
-        senderMenuFragment.setListUsers(array);
-    }
-    public void setListGroups(String[] array, String[] score) {
-        listGroupsFragment.UpdateListAdapter(array, score);
-    }
-    public void setUsersGroup(String[] array) {
-        myAccount.AdapterUsersGroup.clear();
-        for (int j = 0; j < array.length; j++)
-            myAccount.AdapterUsersGroup.add(array[j]);
-    }
-    public void OpenRedCrGroup(ArrayAdapter adapter) {
-        redactorCreatedFragment.setAdapterGroups(adapter);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.layout_main_content, redactorCreatedFragment);
+        fragmentTransaction.replace(id_layout, fragment);
         fragmentTransaction.commit();
     }
 
-    public void UpdateScore(int score) {
-        profileFragment.UpdateScore(score);
-    }
-    public void setNickname(String nickname) {
-        profileFragment.setNickname(nickname);
+    public void OpenRedCrGroup() {
+        OpenFragment(redactorCreatedFragment, R.id.layout_main_content);
     }
 
-    private void UpdateProfile() {
-        profileFragment.UpdateScore(myAccount.getScore());
-        profileFragment.setNickname(myAccount.getName());
-        ((FrameLayout)findViewById(R.id.layout_main_content)).removeAllViews();
-        fragmentTransaction.replace(R.id.layout_main_content, profileFragment);
-        fragmentTransaction.commit();
-    }
     private void InitResources() {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        profileFragment = new ProfileFragment();
+        senderMenuFragment = new SenderMenuFragment();
+        listGroupsFragment = new ListGroupsFragment();
+        redactorCreatedFragment = new GroupRedactorCreatedFragment();
+
         ((ImageView)findViewById(R.id.image_profile)).setImageResource(R.drawable.user);
         ((ImageView)findViewById(R.id.image_sender)).setImageResource(R.drawable.transfer);
         ((ImageView)findViewById(R.id.image_news)).setImageResource(R.drawable.newspaper);
@@ -151,6 +108,3 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-/**
- * Изменить название протоколов
- */

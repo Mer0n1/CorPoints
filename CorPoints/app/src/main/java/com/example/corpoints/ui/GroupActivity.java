@@ -11,21 +11,29 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.example.corpoints.R;
-import com.example.corpoints.cserver.MyAccount;
-import com.example.corpoints.cserver.Server;
+import com.example.corpoints.layer_server.DataCash;
+import com.example.corpoints.layer_server.MainAPI;
+import com.example.corpoints.utils.GroupValidator;
+import com.example.restful.models.Account;
+import com.example.restful.models.Group;
+import com.example.restful.models.RequestInGroup;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.net.URISyntaxException;
+import java.util.List;
+
 
 public class GroupActivity extends AppCompatActivity {
-    private MyAccount myAccount;
+    private Account myAccount;
     private ArrayAdapter<String> AdapterUsersGroup;
+    private GroupValidator validator;
 
     private String typeGroup;
-    private String nameGroup;
+    private Group CurrentGroup;
 
     private FrameLayout main_layout;
 
@@ -34,69 +42,84 @@ public class GroupActivity extends AppCompatActivity {
     private RequestsFragment requestsFragment;
 
     private View.OnClickListener SendRequestListener;
+    private View.OnClickListener LeaveGroupListener;
+    private View.OnClickListener BudgetGroupListener;
+    private View.OnClickListener MenuRequestsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        main_layout = findViewById(R.id.group_window);
+        DataCash.UpdateData();
+        InitResources();
+        initIntent();
+        initializeAdapter();
 
-        AdapterUsersGroup = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        myAccount = Server.myAccount;
-        myAccount.AdapterUsersGroup = AdapterUsersGroup;
-        Server.reader.setGroupActivity(this);
-
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        budgetGroupFragment = new BudgetGroupFragment();
-        requestsFragment    = new RequestsFragment();
-
-        Intent intent = getIntent();
-        typeGroup = intent.getStringExtra("type");
-        nameGroup = intent.getStringExtra("nameGroup");
-
-        View.OnClickListener LeaveGroupListener = new View.OnClickListener() {
+        LeaveGroupListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Server.ProtocolLeaveGroup();
-
-                //Server.UpdateInfoProtocolGroups(); //?*
+                MainAPI.leave();
                 finish();
             }
         };
-        View.OnClickListener BudgetGroupListener = new View.OnClickListener() {
+        BudgetGroupListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                main_layout.removeAllViews();
-
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(main_layout.getId(), budgetGroupFragment);
-                fragmentTransaction.commit();
+                OpenFragment(budgetGroupFragment, main_layout.getId());
             }
         };
 
-        View.OnClickListener MenuRequestsListener = new View.OnClickListener() {
+        MenuRequestsListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                main_layout.removeAllViews();
-
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(main_layout.getId(), requestsFragment);
-                fragmentTransaction.commit();
-
-                Server.ProtocolInfoRequests();
+                OpenFragment(requestsFragment, main_layout.getId());
             }
         };
         SendRequestListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (myAccount.getNameGroup() != null) {
-                    Server.ProtocolJoinToGroup(nameGroup);
-                    Toast.makeText(GroupActivity.this, "Заявка отправлена", Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(GroupActivity.this, "Вы уже состоите в группе", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GroupActivity.this, validator.CheckGroupForRequest(myAccount), Toast.LENGTH_SHORT).show();
+                if (!validator.hasErrors())
+                    MainAPI.SendRequestToGroup(new RequestInGroup(myAccount, CurrentGroup));
             }
         };
+
+        ((ListView)findViewById(R.id.ListUsersGroup)).setAdapter(AdapterUsersGroup);
+
+        initTypeGroup();
+    }
+
+    private void initializeAdapter() {
+        AdapterUsersGroup = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+
+        //Group group = DataCash.getGroups().stream().filter(x->x.getName().equals(nameGroup)).findAny().orElse(null);
+        List<Account> users = CurrentGroup.getUsers();
+
+        for (Account user : users)
+            AdapterUsersGroup.add(user.getUsername());
+    }
+
+    public void ExitPFragment() {
+        finish();
+    }
+
+    private void initIntent() {
+        Intent intent = getIntent();
+        String nameGroup = intent.getStringExtra("nameGroup");
+        CurrentGroup = DataCash.getGroups().stream()
+                .filter(x->x.getName().equals(nameGroup)).findAny().orElse(null);
+        if (CurrentGroup == null) finish();
+    }
+
+    private void initTypeGroup() {
+        if (CurrentGroup.getAdmin().getUsername().equals(myAccount.getUsername()))
+            typeGroup = "Administrator";
+        else if (CurrentGroup.getName().equals(myAccount.getGroup().getName()))
+            typeGroup = "Member";
+        else
+            typeGroup = "Observer";
+
 
         for (int j = 0; j < main_layout.getChildCount(); j++)
             main_layout.getChildAt(j).setVisibility(View.VISIBLE); //set visible all views
@@ -109,14 +132,15 @@ public class GroupActivity extends AppCompatActivity {
             button.setOnClickListener(MenuRequestsListener);
             findViewById(R.id.LeaveGroup).setOnClickListener(LeaveGroupListener);
             findViewById(R.id.BudgetGroup).setOnClickListener(BudgetGroupListener);
+
         } else if (typeGroup.equals("Member")) { //if its my group
             Button button = findViewById(R.id.SigninGroup);
             button.setVisibility(View.INVISIBLE);
 
             findViewById(R.id.LeaveGroup).setOnClickListener(LeaveGroupListener);
             findViewById(R.id.BudgetGroup).setOnClickListener(BudgetGroupListener);
-        } else if (typeGroup.equals("Observer")) {
 
+        } else if (typeGroup.equals("Observer")) {
             Button button = findViewById(R.id.SigninGroup);
             button.setText("Отправить заявку на вступление");
             button.setOnClickListener(SendRequestListener);
@@ -126,19 +150,26 @@ public class GroupActivity extends AppCompatActivity {
             button1.setVisibility(View.INVISIBLE);
             button2.setVisibility(View.INVISIBLE);
         }
-        ((ListView)findViewById(R.id.ListUsersGroup)).setAdapter(AdapterUsersGroup);
-        Server.UpdateInfoProtocolUsersGroup(nameGroup);
+    }
+    public Group getGroup() { return CurrentGroup; }
+
+    private void InitResources() {
+        validator = new GroupValidator();
+
+        main_layout = findViewById(R.id.group_window);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        budgetGroupFragment = new BudgetGroupFragment();
+        requestsFragment    = new RequestsFragment();
+
+        myAccount = DataCash.getMyAccount();
     }
 
+    private void OpenFragment(Fragment fragment, int id_layout) {
+        main_layout.removeAllViews();
 
-
-    public void setRequests(String[] array) {
-        requestsFragment.setRequests(array);
-    }
-
-    public void ExitPFragment() {
-        finish();
-        //setContentView(R.layout.activity_group);
-        //((ListView)findViewById(R.id.ListUsersGroup)).setAdapter(AdapterUsersGroup);
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(id_layout, fragment);
+        fragmentTransaction.commit();
     }
 }

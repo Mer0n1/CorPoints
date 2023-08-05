@@ -1,6 +1,5 @@
 package com.example.corpoints.ui;
 
-import android.accounts.Account;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,21 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.corpoints.MainActivity;
 import com.example.corpoints.R;
-import com.example.corpoints.cserver.MyAccount;
-import com.example.corpoints.cserver.Server;
+import com.example.corpoints.layer_server.DataCash;
+import com.example.corpoints.layer_server.MainAPI;
+import com.example.corpoints.utils.ScoreValidator;
+import com.example.restful.api.AccountsAPI;
+import com.example.restful.models.Account;
+
+import java.util.List;
+
 
 public class SenderMenuFragment extends Fragment {
 
     private FrameLayout main_layout;
-    private MyAccount myAccount;
+    private Account myAccount;
+    private ScoreValidator validator;
 
     private ArrayAdapter<String> AdapterAccounts;
     private ArrayAdapter<String> AdapterChooseScore;
@@ -35,17 +40,11 @@ public class SenderMenuFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         main_layout = (FrameLayout)inflater.inflate(R.layout.fragment_sender, container, false);
-        myAccount = Server.myAccount;
 
-        AdapterChooseScore = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
-        AdapterAccounts    = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
-        AdapterChooseScore.add("10");
-        AdapterChooseScore.add("50");
-        AdapterChooseScore.add("100");
-        AdapterChooseScore.add("200");
-        AdapterChooseScore.add("500");
+        DataCash.UpdateData();
+        InitResources();
+        setListUsers(DataCash.getAccounts());
 
 
         AdapterView.OnItemClickListener ListClick = new AdapterView.OnItemClickListener() { //list users click
@@ -67,20 +66,16 @@ public class SenderMenuFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 EditText GetSend = main_layout.findViewById(R.id.EditGetPointsSend);
-                String col = GetSend.getText().toString();
-                if (col.matches("[0-9]+")) {
-                    int qu = Integer.valueOf(col);
+                String UserGetter = ((TextView) (main_layout.findViewById(R.id.UserChoose))).getText().toString();
+                String score = GetSend.getText().toString();
 
-                    if (qu > myAccount.getScore()) {
-                        Toast.makeText(getActivity(), "Недостаточно баллов", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else
-                        Toast.makeText(getActivity(), "Отправлено", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), validator.CheckCorrectRequest(score,
+                        myAccount, UserGetter), Toast.LENGTH_SHORT).show();
 
-                    String UserGetter = ((TextView) (main_layout.findViewById(R.id.UserChoose))).getText().toString();
-                    Server.ProtocolSendScore(UserGetter, qu);
-                } else
-                    Toast.makeText(getActivity(), "Запрос должен содержать только цифры", Toast.LENGTH_SHORT).show();
+                if (!validator.hasErrors()) {
+                    int scoreInt = Integer.valueOf(score);
+                    MainAPI.SendScoreTo(DataCash.getAccount(UserGetter), scoreInt);
+                }
             }
         };
 
@@ -98,11 +93,22 @@ public class SenderMenuFragment extends Fragment {
         return main_layout;
     }
 
-    public ArrayAdapter getArrayAdapter() { return AdapterAccounts; }
-
-    public void setListUsers(String[] array) {
+    private void setListUsers(List<Account> list) {
         AdapterAccounts.clear();
-        for (int j = 0; j < array.length; j++)
-            AdapterAccounts.add(array[j]);
+        for (int j = 0; j < list.size(); j++)
+            AdapterAccounts.add(list.get(j).getUsername());
+    }
+
+    private void InitResources() {
+        myAccount = DataCash.getMyAccount();
+        validator = new ScoreValidator();
+
+        AdapterChooseScore = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        AdapterAccounts    = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        AdapterChooseScore.add("10");
+        AdapterChooseScore.add("50");
+        AdapterChooseScore.add("100");
+        AdapterChooseScore.add("200");
+        AdapterChooseScore.add("500");
     }
 }

@@ -7,17 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import androidx.fragment.app.Fragment;
-
-import com.example.corpoints.MainActivity;
 import com.example.corpoints.R;
-import com.example.corpoints.cserver.Server;
+import com.example.corpoints.layer_server.DataCash;
+import com.example.restful.models.Account;
 
 public class ProfileFragment extends Fragment {
 
+    private Account myAccount;
     private FrameLayout main_layout;
-    private String name, score;
+    private String name;
+    private String score;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,12 +26,16 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        DataCash.UpdateData();
         main_layout = (FrameLayout)inflater.inflate(R.layout.fragment_profile, container, false);
+        myAccount = DataCash.getMyAccount();
+
+        name = myAccount.getUsername();
+        score = String.valueOf(myAccount.getScore());
 
         View.OnClickListener onClickExit = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Server.Close();
                 getActivity().finish();
             }
         };
@@ -39,16 +43,10 @@ public class ProfileFragment extends Fragment {
 
         ((TextView)main_layout.findViewById(R.id.textNickname)).setText(name);
         ((TextView)main_layout.findViewById(R.id.textView3)).setText(String.valueOf(score));
-        ((TextView)main_layout.findViewById(R.id.textNameGroup)).setText(Server.myAccount.getNameGroup());
+        //((TextView)main_layout.findViewById(R.id.textNameGroup)).setText(AccountsAPI.myAccount.getGroup());
 
         return main_layout;
     }
 
-    public void setNickname(String nickname) {
-        name = nickname;
-    }
-    public void UpdateScore(int score) {
-        this.score = String.valueOf(score);
-    }
 
 }

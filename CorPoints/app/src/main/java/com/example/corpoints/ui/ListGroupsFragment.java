@@ -16,13 +16,13 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.example.corpoints.MainActivity;
 import com.example.corpoints.R;
-import com.example.corpoints.cserver.MyAccount;
-import com.example.corpoints.cserver.Server;
+import com.example.corpoints.layer_server.DataCash;
+import com.example.corpoints.utils.GroupValidator;
+import com.example.restful.models.Account;
+import com.example.restful.models.Group;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,37 +32,44 @@ import java.util.Map;
 
 public class ListGroupsFragment extends Fragment {
     private FrameLayout main_layout;
-    private MyAccount myAccount;
+    private Account myAccount;
     private SimpleAdapter AdapterGroups;
+    private GroupValidator validator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState);}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        DataCash.UpdateData();
         main_layout = (FrameLayout)inflater.inflate(R.layout.fragment_listgroups, container, false);
-        myAccount = Server.myAccount;
+        myAccount = DataCash.getMyAccount();
+        validator = new GroupValidator();
+
+        UpdateListAdapter(DataCash.getGroups());
+
 
         View.OnClickListener ClickGoToMyGroup = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (myAccount.getNameGroup().equals("null")) {
-                    Toast.makeText(getActivity(), "Вы не состоите в группе", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                OpenGroup(myAccount.getNameGroup());
+                String check = validator.CheckGroup(myAccount);
+                if (!check.isEmpty())
+                    Toast.makeText(getActivity(), check, Toast.LENGTH_SHORT).show();
+
+                if (!validator.hasErrors())
+                    OpenGroup(myAccount.getGroup().getName());
             }
         };
-        View.OnClickListener ClickCreateGroup = new View.OnClickListener() { //создание группы
+        View.OnClickListener ClickCreateGroup = new View.OnClickListener() { //menu for create group
             @Override
             public void onClick(View v) {
 
-                ArrayAdapter<String> adapterGroups = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+                /*ArrayAdapter<String> adapterGroups = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
                 for (int j = 0; j < AdapterGroups.getCount(); j++) {
                     HashMap<String, Object> itemHashMap = (HashMap<String, Object>) AdapterGroups.getItem(j);
                     adapterGroups.add(itemHashMap.get("First").toString());
-                }
-                ((MainActivity)getActivity()).OpenRedCrGroup(adapterGroups);
+                }*/
+                ((MainActivity)getActivity()).OpenRedCrGroup();
             }
         };
         AdapterView.OnItemClickListener ListClickGroups = new AdapterView.OnItemClickListener() { //list score click
@@ -85,27 +92,17 @@ public class ListGroupsFragment extends Fragment {
 
 
     private void OpenGroup(String nameGroup) {
-        String type = "Observer"; //who i am?
-
-        if (nameGroup.equals(myAccount.getNameGroup())) {
-            if (myAccount.isAdmin())
-                type = "Administrator";
-            else
-                type = "Member";
-        }
-
         Intent intent = new Intent(getActivity(), GroupActivity.class);
-        intent.putExtra("type", type);
         intent.putExtra("nameGroup", nameGroup);
         startActivity(intent);
     }
 
-    public void UpdateListAdapter(String [] arrOne, String [] arrTwo) {
+    private void UpdateListAdapter(List<Group> groups) {
 
         HashMap<String, String> hashMap = new HashMap<>();
 
-        for (int j = 0; j < arrOne.length; j++)
-            hashMap.put(arrOne[j], arrTwo[j] + " balls");
+        for (int j = 0; j < groups.size(); j++)
+            hashMap.put(groups.get(j).getName(), groups.get(j).getGroupScore() + " balls");
 
         List<HashMap<String, String>> listItems = new ArrayList<>();
         AdapterGroups = new SimpleAdapter(getActivity(), listItems, R.layout.list_item,
