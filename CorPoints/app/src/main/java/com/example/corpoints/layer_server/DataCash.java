@@ -53,6 +53,7 @@ public class DataCash {
     public static void setMyAccount(Account myAccount) {
         DataCash.myAccount = myAccount;
     }
+    public static void initAccount(String username) { myAccount = MainAPI.getAccount(username);}
 
     public static void UpdateData() {
         accounts = MainAPI.getAccounts();

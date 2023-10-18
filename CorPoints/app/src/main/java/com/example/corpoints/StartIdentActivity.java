@@ -3,6 +3,9 @@ package com.example.corpoints;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -10,6 +13,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.corpoints.layer_server.DataCash;
 import com.example.corpoints.layer_server.MainAPI;
@@ -69,7 +74,7 @@ public class StartIdentActivity extends Activity {
                     System.err.println("itog " + itog);
 
                     if (itog) {
-                        DataCash.setMyAccount(account);
+                        DataCash.initAccount(account.getUsername());
 
                         Intent intent = new Intent(StartIdentActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -106,4 +111,5 @@ public class StartIdentActivity extends Activity {
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         ((CheckBox)findViewById(R.id.CheckBox_ident)).setChecked(true);
     }
+
 }

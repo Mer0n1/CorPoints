@@ -8,9 +8,9 @@ android {
     defaultConfig {
         applicationId "com.kosta.corpoints"
         minSdk 24
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        targetSdk 33
+        versionCode 4
+        versionName "1.3"
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

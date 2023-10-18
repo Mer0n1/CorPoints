@@ -47,7 +47,7 @@ public class GroupService {
         if (sender.getGroup() != null)
             throw new YouHaveGroupException();
 
-        //group.setAdmin(sender);
+        group.setAdmin(sender);
         group.setUsers(new ArrayList<>());
         group.getUsers().add(sender);
         create(group);

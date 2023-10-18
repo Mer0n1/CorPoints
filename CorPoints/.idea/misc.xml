@@ -47,13 +47,25 @@
         <entry key="..\:/AndroidProjects/CorpBalls/CorpBalls/app/src/main/res/layout/sender_pmenu.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/CorpBalls/CorpBalls/app/src/main/res/layout/toolbar.xml" value="0.25416666666666665" />
         <entry key="..\:/AndroidProjects/CorpBalls/CorpBalls/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.205" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/btn_yellow.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/edittext_shape_1.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/gradient_background_general.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/gradient_type_ob.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/layout_bg.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/drawable/layout_bgd.xml" value="0.1" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/acitivity_identefication.xml" value="0.25" />
-        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/activity_group.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/activity_group.xml" value="0.22" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/activity_main.xml" value="0.16259057971014493" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/app_bar_main.xml" value="0.17391304347826086" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/content_main.xml" value="0.17391304347826086" />
-        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_budget_group.xml" value="0.1" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_budget_group.xml" value="0.22" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_listgroups.xml" value="0.25" />
-        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_redactor_group.xml" value="0.25" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_requests_group.xml" value="0.2" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/fragment_sender.xml" value="0.25" />
+        <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/item_request_togroup.xml" value="0.16259057971014493" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/list_item.xml" value="0.18" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/layout/redactor_group.xml" value="0.25" />
         <entry key="..\:/Github/Android apps/CorPoints/CorPoints/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />

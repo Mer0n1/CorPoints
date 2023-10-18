@@ -26,7 +26,6 @@ public class Group {
     @Column(name = "group_score")
     private int GroupScore;
 
-    @NotNull(message= "Отсутствует администратор")
     @OneToOne
     @JoinColumn(name = "id_admin", referencedColumnName = "id")
     @JsonIgnoreProperties("group")

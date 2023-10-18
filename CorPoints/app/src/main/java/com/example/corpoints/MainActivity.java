@@ -1,6 +1,9 @@
 package com.example.corpoints;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.app_bar_main); //пока без выплывающего меню
         getLayoutInflater().inflate(R.layout.fragment_profile, findViewById(R.id.layout_main_content));
 
-        DataCash.UpdateData();
+        //DataCash.UpdateData();
         InitResources();
         OpenFragment(profileFragment, R.id.layout_main_content);
 
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         ((ImageView)findViewById(R.id.image_news)).setImageResource(R.drawable.newspaper);
         ((ImageView)findViewById(R.id.image_groups)).setImageResource(R.drawable.group);
     }
+
 
     /*@Override
     protected void onDestroy() {

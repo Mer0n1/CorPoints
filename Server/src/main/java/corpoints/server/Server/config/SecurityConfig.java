@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 
 @Configuration
@@ -39,7 +44,7 @@ class WebSecurityConfiguration {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf().disable().authorizeHttpRequests( (auth) -> auth
-                .requestMatchers("/groups/test","/accounts/register", "/accounts/authentication")
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/groups/test","/accounts/register", "/accounts/authentication")
                 .permitAll()
                 .anyRequest().authenticated()
         )
@@ -52,4 +57,5 @@ class WebSecurityConfiguration {
     }
 
 }
+
 

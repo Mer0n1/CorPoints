@@ -33,10 +33,6 @@ public class Account {
     @JsonIgnoreProperties("users")//чтобы не возникала рекурсия
     private Group group;
 
-    /*@JsonIgnore
-    @OneToOne(mappedBy = "admin")
-    private Group group2;*/
-
     @OneToMany(mappedBy = "owner")
     @JsonIgnore
     private List<RequestInGroup> requestInGroup;

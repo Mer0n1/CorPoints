@@ -39,6 +39,7 @@ public class MainAPI {
 
     public static List<RequestInGroup> getRequests() { return requestsAPI.getRequests(); }
 
+    public static Account getAccount(String username) { return accountsAPI.getAccount(username);}
     /**
      * Аутентификация с последующей обработкой ошибок.
      * Исключения должны быть обработаны и показаны в поле ошибок в Android окне

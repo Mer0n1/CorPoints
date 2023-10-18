@@ -22,6 +22,11 @@
             android:textSize="22dp"
             tools:ignore="MissingConstraints" />
 
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,14 +35,14 @@
             <Button
                 android:id="@+id/MyGroupButton"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/btn_orange"
                 android:text="Моя группа" />
 
             <Space
                 android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0" />
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/RedactorGroupButton"
@@ -45,8 +50,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:background="@drawable/btn_yellow"
                 android:text="Создать группу" />
         </LinearLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -56,7 +67,9 @@
             <ListView
                 android:id="@+id/ListGroups"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                />
 
         </ScrollView>
     </LinearLayout>

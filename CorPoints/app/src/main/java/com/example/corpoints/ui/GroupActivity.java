@@ -115,7 +115,8 @@ public class GroupActivity extends AppCompatActivity {
     private void initTypeGroup() {
         if (CurrentGroup.getAdmin().getUsername().equals(myAccount.getUsername()))
             typeGroup = "Administrator";
-        else if (CurrentGroup.getName().equals(myAccount.getGroup().getName()))
+        else if (CurrentGroup.getName().equals((myAccount.getGroup() == null)
+                ? "" : myAccount.getGroup().getName()))
             typeGroup = "Member";
         else
             typeGroup = "Observer";

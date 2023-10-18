@@ -71,6 +71,8 @@ public class RequestService {
             throw new UncorrectException();
         if (request.getId() == 0)
             throw new UncorrectException();
+        if (group.getAdmin() == null)
+            throw new UncorrectException();
         if (!group.getAdmin().getUsername().equals(sender.getUsername()))
             throw new UncorrectException();
 
